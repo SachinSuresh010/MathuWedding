@@ -1,20 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="14" fill="#4A5538"/>
   <text
-    x="32" y="22"
+    x="32" y="40"
     font-family="Georgia, serif"
-    font-size="13"
+    font-size="18"
     font-style="italic"
     fill="#E2D3B3"
     text-anchor="middle"
     letter-spacing="1">M &amp; S</text>
-  <line x1="14" y1="29" x2="50" y2="29" stroke="#C5AC7C" stroke-width="0.8" opacity="0.6"/>
-  <text
-    x="32" y="48"
-    font-family="Georgia, serif"
-    font-size="9"
-    fill="#C5AC7C"
-    text-anchor="middle"
-    letter-spacing="2"
-    opacity="0.9">2026</text>
 </svg>
