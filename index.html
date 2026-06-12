@@ -236,12 +236,11 @@
         <span class="text-sm font-medium uppercase tracking-widest2 text-olive-700">St. Johns Jacobite Syrian Church · Pannoor, Kerala</span>
       </div>
 
-      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Mathen%20%26%20Suzaine%27s%20Wedding&dates=20260718T090000Z%2F20260718T160000Z&details=Holy%20Matrimony%20at%20St.%20Johns%20Jacobite%20Syrian%20Church%2C%20Pannoor%20at%202%3A30%20PM%2C%20followed%20by%20reception%20at%20Josh%20Pavilion%2C%20Thodupuzha%20at%206%3A30%20PM.&location=St.%20Johns%20Jacobite%20Syrian%20Church%2C%20Pannoor%2C%20Kerala%2C%20India"
-         target="_blank" rel="noopener"
+      <button id="add-to-cal-btn"
          class="hero-anim hero-anim-4 mt-7 inline-flex items-center gap-2.5 rounded-full border border-olive-600/40 px-6 py-2.5 text-xs font-medium uppercase tracking-widest2 text-olive-700 transition-all duration-300 hover:border-olive-600 hover:bg-olive-600 hover:text-alabaster-50">
         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
         Add to Calendar
-      </a>
+      </button>
 
       <!-- countdown -->
       <div class="hero-anim hero-anim-5 mt-14">
@@ -661,6 +660,64 @@
         { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
       );
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+      /* ============================================================
+         2. ADD TO CALENDAR — platform-aware
+         ============================================================ */
+      document.getElementById('add-to-cal-btn').addEventListener('click', function () {
+        const ua = navigator.userAgent;
+        const isIOS     = /iPhone|iPad|iPod/i.test(ua);
+        const isMac     = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
+        const isAndroid = /Android/i.test(ua);
+        // Windows & everything else → Google Calendar URL
+
+        // Google Calendar URL (universal fallback)
+        const googleUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+          + '&text=Mathen%20%26%20Suzaine%27s%20Wedding'
+          + '&dates=20260718T090000Z%2F20260718T173000Z'
+          + '&details=Holy%20Matrimony%20at%20St.%20Johns%20Jacobite%20Syrian%20Church%2C%20Pannoor%20at%202%3A30%20PM%20IST%2C%20followed%20by%20reception%20at%20Josh%20Pavilion%2C%20Thodupuzha%20at%206%3A30%20PM%20IST.'
+          + '&location=St.%20Johns%20Jacobite%20Syrian%20Church%2C%20Pannoor%2C%20Kerala%2C%20India';
+
+        if (isAndroid) {
+          // Android: Google Calendar opens natively in the app if installed
+          window.open(googleUrl, '_blank', 'noopener');
+          return;
+        }
+
+        if (isIOS || isMac) {
+          // iOS & macOS: download .ics — system prompts to open in Apple Calendar
+          const ics = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//Mathen & Suzaine Wedding//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VEVENT',
+            'DTSTART:20260718T090000Z',
+            'DTEND:20260718T173000Z',
+            'SUMMARY:Mathen & Suzaine\'s Wedding',
+            'DESCRIPTION:Holy Matrimony at St. Johns Jacobite Syrian Church\\, Pannoor at 2:30 PM IST.\\nReception at Josh Pavilion\\, Thodupuzha at 6:30 PM IST.',
+            'LOCATION:St. Johns Jacobite Syrian Church\\, Pannoor\\, Kerala\\, India',
+            'STATUS:CONFIRMED',
+            'END:VEVENT',
+            'END:VCALENDAR'
+          ].join('\r\n');
+
+          const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href     = url;
+          a.download = 'mathen-suzaine-wedding.ics';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          return;
+        }
+
+        // Windows & everything else → Google Calendar (also works in Outlook web)
+        window.open(googleUrl, '_blank', 'noopener');
+      });
 
       /* ============================================================
          3. GALLERY LIGHTBOX
