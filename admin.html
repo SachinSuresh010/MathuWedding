@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP Admin — Mathen &amp; Suzaine</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234A5538'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' fill='%23E2D3B3' text-anchor='middle' font-style='italic'%3EM%26S%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            alabaster: { 50: '#FBF9F4', 100: '#F6F2E9', 200: '#EFE8DA' },
+            olive: { 500: '#5C6B47', 600: '#4A5538', 700: '#3E472F', 800: '#323A26', 900: '#272E1E' },
+            champagne: { 300: '#E2D3B3', 400: '#D4BF94', 500: '#C5AC7C', 600: '#A98F5E' },
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          letterSpacing: { widest2: '0.3em' },
+        },
+      },
+    };
+  </script>
+  <style>
+    ::selection { background: #C5AC7C; color: #fff; }
+    body { -webkit-font-smoothing: antialiased; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .fade-up-2 { animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+    .fade-up-3 { animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both; }
+
+    .field-input { transition: border-color 0.25s ease, box-shadow 0.25s ease; }
+    .field-input:focus { outline: none; border-color: #4A5538; box-shadow: 0 0 0 3px rgba(92,107,71,0.15); }
+
+    /* Stat cards */
+    .stat-card { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease; }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -12px rgba(50,58,38,0.18); }
+
+    /* Table row hover */
+    tbody tr { transition: background-color 0.2s ease; }
+    tbody tr:hover { background-color: #F6F2E9; }
+
+    /* Badge */
+    .badge-accepts  { background: #d1fae5; color: #065f46; }
+    .badge-declines { background: #fee2e2; color: #991b1b; }
+
+    /* Scrollbar */
+    .table-wrap::-webkit-scrollbar { height: 6px; }
+    .table-wrap::-webkit-scrollbar-track { background: #F6F2E9; border-radius: 10px; }
+    .table-wrap::-webkit-scrollbar-thumb { background: #D4BF94; border-radius: 10px; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-alabaster-50 font-sans text-olive-800">
+
+  <!-- ============ LOGIN SCREEN ============ -->
+  <div id="login-screen" class="flex min-h-screen flex-col items-center justify-center px-6 py-16">
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0">
+      <div class="absolute -top-24 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-champagne-300/20 blur-3xl"></div>
+      <div class="absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-olive-500/10 blur-3xl"></div>
+    </div>
+
+    <div class="relative w-full max-w-sm">
+      <div class="fade-up mb-10 text-center">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-champagne-600">Admin Access</p>
+        <h1 class="mt-4 font-serif text-4xl font-medium text-olive-800">RSVP Dashboard</h1>
+        <p class="mt-3 font-serif text-base italic text-olive-500">Mathen &amp; Suzaine · July 18, 2026</p>
+      </div>
+
+      <form id="login-form" class="fade-up-2 rounded-3xl border border-olive-800/10 bg-white p-8 shadow-xl shadow-olive-800/10">
+        <div aria-hidden="true" class="mb-8 h-1 w-full rounded-full bg-gradient-to-r from-champagne-400 via-olive-500 to-champagne-400"></div>
+
+        <label for="password" class="mb-2.5 block text-xs font-medium uppercase tracking-widest2 text-olive-700">Password</label>
+        <div class="relative">
+          <input
+            type="password" id="password" autocomplete="current-password"
+            placeholder="Enter admin password"
+            class="field-input w-full rounded-xl border border-olive-800/15 bg-alabaster-50 px-5 py-3.5 pr-12 text-sm text-olive-800 placeholder:text-olive-500/40" />
+          <button type="button" id="toggle-pw" aria-label="Show/hide password"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 text-olive-400 transition-colors hover:text-olive-700">
+            <svg id="eye-icon" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+        </div>
+        <p id="login-error" class="mt-2 hidden text-xs text-red-600">Incorrect password. Please try again.</p>
+
+        <button type="submit"
+                class="group mt-6 w-full overflow-hidden rounded-xl bg-olive-600 px-8 py-4 text-sm font-medium uppercase tracking-widest2 text-alabaster-50 shadow-lg shadow-olive-800/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-olive-700 hover:shadow-xl active:translate-y-0">
+          <span class="inline-flex items-center justify-center gap-3">
+            <span id="login-label">View RSVPs</span>
+            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </span>
+        </button>
+      </form>
+
+      <p class="fade-up-3 mt-6 text-center text-xs text-olive-400">
+        <a href="index.html" class="underline-offset-4 transition-colors hover:text-champagne-600 hover:underline">← Back to wedding site</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="dashboard" class="hidden min-h-screen">
+
+    <!-- Top bar -->
+    <header class="border-b border-olive-800/10 bg-white px-6 py-4 shadow-sm">
+      <div class="mx-auto flex max-w-7xl items-center justify-between">
+        <div>
+          <p class="font-serif text-xl text-olive-800">RSVP Dashboard</p>
+          <p class="text-xs text-olive-500">Mathen &amp; Suzaine · July 18, 2026</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <button id="refresh-btn" title="Refresh data"
+                  class="flex h-9 w-9 items-center justify-center rounded-full border border-olive-800/15 text-olive-600 transition-colors duration-300 hover:border-olive-600 hover:text-olive-800">
+            <svg id="refresh-icon" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+          </button>
+          <button id="logout-btn"
+                  class="rounded-full border border-olive-800/15 px-5 py-2 text-xs font-medium uppercase tracking-widest2 text-olive-600 transition-all duration-300 hover:border-olive-600 hover:bg-olive-600 hover:text-alabaster-50">
+            Log out
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+
+      <!-- Stats row -->
+      <div id="stats-row" class="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
+        <div class="stat-card rounded-2xl border border-olive-800/10 bg-white p-6 text-center shadow-sm">
+          <p class="text-xs font-medium uppercase tracking-widest2 text-olive-500">Total RSVPs</p>
+          <p id="stat-total" class="mt-2 font-serif text-4xl font-medium text-olive-800">—</p>
+        </div>
+        <div class="stat-card rounded-2xl border border-olive-800/10 bg-white p-6 text-center shadow-sm">
+          <p class="text-xs font-medium uppercase tracking-widest2 text-olive-500">Attending</p>
+          <p id="stat-accepts" class="mt-2 font-serif text-4xl font-medium text-olive-800">—</p>
+        </div>
+        <div class="stat-card rounded-2xl border border-olive-800/10 bg-white p-6 text-center shadow-sm">
+          <p class="text-xs font-medium uppercase tracking-widest2 text-olive-500">Declined</p>
+          <p id="stat-declines" class="mt-2 font-serif text-4xl font-medium text-olive-800">—</p>
+        </div>
+        <div class="stat-card rounded-2xl border border-olive-800/10 bg-white p-6 text-center shadow-sm">
+          <p class="text-xs font-medium uppercase tracking-widest2 text-olive-500">Total Guests</p>
+          <p id="stat-guests" class="mt-2 font-serif text-4xl font-medium text-olive-800">—</p>
+        </div>
+      </div>
+
+      <!-- Table card -->
+      <div class="rounded-3xl border border-olive-800/10 bg-white shadow-sm">
+        <div aria-hidden="true" class="h-1 w-full rounded-t-3xl bg-gradient-to-r from-champagne-400 via-olive-500 to-champagne-400"></div>
+
+        <!-- Toolbar -->
+        <div class="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div class="relative w-full sm:max-w-xs">
+            <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-olive-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input type="search" id="search-input" placeholder="Search by name…"
+                   class="field-input w-full rounded-xl border border-olive-800/15 bg-alabaster-50 py-2.5 pl-11 pr-4 text-sm text-olive-800 placeholder:text-olive-500/40" />
+          </div>
+
+          <div class="flex items-center gap-3">
+            <select id="filter-status"
+                    class="field-input rounded-xl border border-olive-800/15 bg-alabaster-50 px-4 py-2.5 text-sm text-olive-700 cursor-pointer appearance-none pr-8">
+              <option value="all">All responses</option>
+              <option value="Accepts">Attending</option>
+              <option value="Declines">Declined</option>
+            </select>
+
+            <button id="export-btn" title="Export CSV"
+                    class="flex items-center gap-2 rounded-xl border border-olive-800/15 bg-alabaster-50 px-4 py-2.5 text-xs font-medium uppercase tracking-widest2 text-olive-600 transition-all duration-300 hover:border-olive-600 hover:bg-olive-600 hover:text-alabaster-50">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-state" class="flex flex-col items-center justify-center py-24 text-center">
+          <svg class="spinner h-8 w-8 text-champagne-500" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          <p class="mt-4 text-sm text-olive-500">Loading responses…</p>
+        </div>
+
+        <!-- Empty -->
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-24 text-center">
+          <svg class="h-12 w-12 text-champagne-400" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+          <p class="mt-4 font-serif text-xl text-olive-700">No responses yet</p>
+          <p class="mt-2 text-sm text-olive-500">RSVPs will appear here as guests submit them.</p>
+        </div>
+
+        <!-- No results from filter -->
+        <div id="no-results-state" class="hidden flex-col items-center justify-center py-20 text-center">
+          <p class="font-serif text-xl text-olive-700">No matches found</p>
+          <p class="mt-2 text-sm text-olive-500">Try a different name or filter.</p>
+        </div>
+
+        <!-- Table -->
+        <div id="table-wrap" class="table-wrap hidden overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-olive-800/10">
+                <th class="px-6 py-3.5 text-left text-xs font-medium uppercase tracking-widest2 text-olive-500">Name</th>
+                <th class="px-6 py-3.5 text-left text-xs font-medium uppercase tracking-widest2 text-olive-500">Status</th>
+                <th class="px-6 py-3.5 text-left text-xs font-medium uppercase tracking-widest2 text-olive-500">Guests</th>
+                <th class="px-6 py-3.5 text-left text-xs font-medium uppercase tracking-widest2 text-olive-500">Dietary</th>
+                <th class="px-6 py-3.5 text-left text-xs font-medium uppercase tracking-widest2 text-olive-500">Submitted</th>
+              </tr>
+            </thead>
+            <tbody id="table-body" class="divide-y divide-olive-800/5"></tbody>
+          </table>
+          <div id="table-footer" class="hidden border-t border-olive-800/10 px-6 py-4 text-xs text-olive-400"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytEDd-l9cYcAlGMyz1djZvgaUtDc2vCuCbAKun5CY1StZ7z50wbHq4Epu4M_2YRqV1rA/exec';
+      const PASSWORD   = 'mathen2026';
+
+      const loginScreen  = document.getElementById('login-screen');
+      const dashboard    = document.getElementById('dashboard');
+      const loginForm    = document.getElementById('login-form');
+      const loginError   = document.getElementById('login-error');
+      const passwordInput = document.getElementById('password');
+
+      const loadingState   = document.getElementById('loading-state');
+      const emptyState     = document.getElementById('empty-state');
+      const noResultsState = document.getElementById('no-results-state');
+      const tableWrap      = document.getElementById('table-wrap');
+      const tableBody      = document.getElementById('table-body');
+      const tableFooter    = document.getElementById('table-footer');
+
+      const statTotal    = document.getElementById('stat-total');
+      const statAccepts  = document.getElementById('stat-accepts');
+      const statDeclines = document.getElementById('stat-declines');
+      const statGuests   = document.getElementById('stat-guests');
+
+      const searchInput   = document.getElementById('search-input');
+      const filterStatus  = document.getElementById('filter-status');
+
+      let allRows = [];
+
+      /* ── Toggle password visibility ── */
+      document.getElementById('toggle-pw').addEventListener('click', () => {
+        const isText = passwordInput.type === 'text';
+        passwordInput.type = isText ? 'password' : 'text';
+      });
+
+      /* ── Login ── */
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (passwordInput.value.trim() !== PASSWORD) {
+          loginError.classList.remove('hidden');
+          passwordInput.focus();
+          return;
+        }
+        loginError.classList.add('hidden');
+        loginScreen.classList.add('hidden');
+        dashboard.classList.remove('hidden');
+        loadData();
+      });
+
+      /* ── Logout ── */
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        allRows = [];
+        passwordInput.value = '';
+        dashboard.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
+      });
+
+      /* ── Refresh ── */
+      document.getElementById('refresh-btn').addEventListener('click', () => {
+        const icon = document.getElementById('refresh-icon');
+        icon.classList.add('spinner');
+        loadData().finally(() => icon.classList.remove('spinner'));
+      });
+
+      /* ── Load data from Apps Script ── */
+      function loadData() {
+        showState('loading');
+        return fetch(`${SCRIPT_URL}?key=${PASSWORD}`)
+          .then(r => r.json())
+          .then(json => {
+            if (json.error) { showState('empty'); return; }
+            allRows = json.data || [];
+            renderStats(allRows);
+            applyFilters();
+          })
+          .catch(() => {
+            showState('empty');
+          });
+      }
+
+      /* ── Stats ── */
+      function renderStats(rows) {
+        const accepts  = rows.filter(r => r['Attendance'] === 'Accepts');
+        const declines = rows.filter(r => r['Attendance'] === 'Declines');
+        const guests   = accepts.reduce((sum, r) => sum + (parseInt(r['Number of Guests']) || 0), 0);
+        statTotal.textContent    = rows.length;
+        statAccepts.textContent  = accepts.length;
+        statDeclines.textContent = declines.length;
+        statGuests.textContent   = guests;
+      }
+
+      /* ── Filter + search ── */
+      function applyFilters() {
+        const q      = searchInput.value.trim().toLowerCase();
+        const status = filterStatus.value;
+
+        const filtered = allRows.filter(row => {
+          const nameMatch   = !q || (row['Full Name'] || '').toLowerCase().includes(q);
+          const statusMatch = status === 'all' || row['Attendance'] === status;
+          return nameMatch && statusMatch;
+        });
+
+        if (allRows.length === 0) { showState('empty'); return; }
+        if (filtered.length === 0) { showState('no-results'); return; }
+        renderTable(filtered);
+      }
+
+      searchInput.addEventListener('input', applyFilters);
+      filterStatus.addEventListener('change', applyFilters);
+
+      /* ── Render table ── */
+      function renderTable(rows) {
+        showState('table');
+        tableBody.innerHTML = rows.map(row => {
+          const att     = row['Attendance'] || '—';
+          const badgeClass = att === 'Accepts' ? 'badge-accepts' : att === 'Declines' ? 'badge-declines' : 'bg-gray-100 text-gray-600';
+          const badgeLabel = att === 'Accepts' ? 'Attending' : att === 'Declines' ? 'Declined' : att;
+          const dietary  = (row['Dietary Restrictions'] || '').trim();
+          const ts       = row['Timestamp'] ? new Date(row['Timestamp']).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+
+          return `<tr>
+            <td class="px-6 py-4 font-medium text-olive-800">${escHtml(row['Full Name'] || '—')}</td>
+            <td class="px-6 py-4">
+              <span class="${badgeClass} rounded-full px-3 py-1 text-xs font-medium">${escHtml(badgeLabel)}</span>
+            </td>
+            <td class="px-6 py-4 text-olive-600">${escHtml(row['Number of Guests'] || '—')}</td>
+            <td class="px-6 py-4 text-olive-600 max-w-[200px] truncate" title="${escHtml(dietary)}">${dietary ? escHtml(dietary) : '<span class="text-olive-400 italic">None</span>'}</td>
+            <td class="px-6 py-4 text-olive-500 whitespace-nowrap">${escHtml(ts)}</td>
+          </tr>`;
+        }).join('');
+
+        tableFooter.textContent = `Showing ${rows.length} of ${allRows.length} response${allRows.length !== 1 ? 's' : ''}`;
+        tableFooter.classList.remove('hidden');
+      }
+
+      /* ── State switcher ── */
+      function showState(state) {
+        loadingState.classList.add('hidden');
+        emptyState.classList.add('hidden');
+        noResultsState.classList.add('hidden');
+        tableWrap.classList.add('hidden');
+        tableFooter.classList.add('hidden');
+
+        loadingState.classList.remove('flex');
+        emptyState.classList.remove('flex');
+        noResultsState.classList.remove('flex');
+
+        if (state === 'loading') { loadingState.classList.remove('hidden'); loadingState.classList.add('flex'); }
+        else if (state === 'empty') { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+        else if (state === 'no-results') { noResultsState.classList.remove('hidden'); noResultsState.classList.add('flex'); }
+        else if (state === 'table') { tableWrap.classList.remove('hidden'); }
+      }
+
+      /* ── CSV export ── */
+      document.getElementById('export-btn').addEventListener('click', () => {
+        if (!allRows.length) return;
+        const headers = ['Full Name', 'Attendance', 'Number of Guests', 'Dietary Restrictions', 'Timestamp'];
+        const rows    = allRows.map(r => headers.map(h => `"${(r[h] || '').toString().replace(/"/g, '""')}"`).join(','));
+        const csv     = [headers.join(','), ...rows].join('\n');
+        const blob    = new Blob([csv], { type: 'text/csv' });
+        const url     = URL.createObjectURL(blob);
+        const a       = document.createElement('a');
+        a.href = url; a.download = 'mathen-suzaine-rsvp.csv'; a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      /* ── Utility ── */
+      function escHtml(str) {
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+    })();
+  </script>
+</body>
+</html>
