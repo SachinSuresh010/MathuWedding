@@ -533,10 +533,19 @@
                   <option value="2">2 guests</option>
                   <option value="3">3 guests</option>
                   <option value="4">4 guests</option>
+                  <option value="5+">5 or more…</option>
                 </select>
                 <svg aria-hidden="true" class="pointer-events-none absolute right-5 top-1/2 h-4 w-4 -translate-y-1/2 text-olive-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
+              </div>
+              <!-- Expanded guest count — shown only when "5 or more" is selected -->
+              <div id="guest-custom-wrap" class="hidden mt-3 overflow-hidden transition-all duration-300">
+                <label for="guest-custom" class="mb-2 block text-xs text-olive-500">How many guests in your party?</label>
+                <input
+                  type="number" id="guest-custom" min="5" max="50" placeholder="e.g. 6"
+                  class="field-input w-full rounded-xl border border-olive-800/15 bg-alabaster-50 px-5 py-3.5 text-sm text-olive-800 placeholder:text-olive-500/40" />
+                <p id="guest-custom-error" class="mt-2 hidden text-xs text-[#B3502D]">Please enter a number of 5 or more.</p>
               </div>
               <p data-error-for="guest-count" class="mt-2 hidden text-xs text-[#B3502D]">Please select the size of your party.</p>
             </div>
@@ -770,6 +779,9 @@
 
       const nameInput = document.getElementById('full-name');
       const guestSelect = document.getElementById('guest-count');
+      const guestCustomWrap = document.getElementById('guest-custom-wrap');
+      const guestCustom = document.getElementById('guest-custom');
+      const guestCustomError = document.getElementById('guest-custom-error');
 
       function showError(key, show) {
         const msg = form.querySelector(`[data-error-for="${key}"]`);
@@ -796,6 +808,15 @@
         showError('guest-count', !guestsOk);
         if (!guestsOk) valid = false;
 
+        // Custom guest count: must be a number ≥ 5 if "5+" was selected.
+        if (guestSelect.value === '5+') {
+          const n = parseInt(guestCustom.value, 10);
+          const customOk = !isNaN(n) && n >= 5;
+          guestCustom.classList.toggle('field-error', !customOk);
+          guestCustomError.classList.toggle('hidden', customOk);
+          if (!customOk) valid = false;
+        }
+
         return valid;
       }
 
@@ -809,6 +830,20 @@
       guestSelect.addEventListener('change', () => {
         guestSelect.classList.remove('field-error');
         showError('guest-count', false);
+        const isCustom = guestSelect.value === '5+';
+        guestCustomWrap.classList.toggle('hidden', !isCustom);
+        if (isCustom) {
+          guestCustom.focus();
+        } else {
+          guestCustom.value = '';
+          guestCustomError.classList.add('hidden');
+          guestCustom.classList.remove('field-error');
+        }
+      });
+
+      guestCustom.addEventListener('input', () => {
+        guestCustom.classList.remove('field-error');
+        guestCustomError.classList.add('hidden');
       });
       form.querySelectorAll('input[name="attendance"]').forEach((radio) => {
         radio.addEventListener('change', () => showError('attendance', false));
@@ -828,7 +863,7 @@
         const data = {
           fullName: nameInput.value.trim(),
           attendance: form.querySelector('input[name="attendance"]:checked').value,
-          guests: guestSelect.value,
+          guests: guestSelect.value === '5+' ? guestCustom.value : guestSelect.value,
           dietary: document.getElementById('dietary').value.trim(),
         };
 
