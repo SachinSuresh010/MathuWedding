@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mathen &amp; Suzaine — We're Getting Married</title>
+  <meta name="description" content="Join us to celebrate the wedding of Mathen & Suzaine — July 18, 2026, Pannoor, Kerala." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234A5538'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' fill='%23E2D3B3' text-anchor='middle' font-style='italic'%3EM%26S%3C/text%3E%3C/svg%3E" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            alabaster: {
+              50:  '#FBF9F4',
+              100: '#F6F2E9',
+              200: '#EFE8DA',
+            },
+            olive: {
+              500: '#5C6B47',
+              600: '#4A5538',
+              700: '#3E472F',
+              800: '#323A26',
+              900: '#272E1E',
+            },
+            champagne: {
+              300: '#E2D3B3',
+              400: '#D4BF94',
+              500: '#C5AC7C',
+              600: '#A98F5E',
+            },
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          letterSpacing: {
+            widest2: '0.3em',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ——— Base ——— */
+    ::selection { background: #C5AC7C; color: #fff; }
+    body { -webkit-font-smoothing: antialiased; }
+
+    /* ——— Scroll reveal ——— */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* Staggered children */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-stagger.is-visible > * { opacity: 1; transform: translateY(0); }
+    .reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; }
+    .reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.18s; }
+    .reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.31s; }
+    .reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 0.44s; }
+
+    /* ——— Hero entrance ——— */
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-anim { opacity: 0; animation: heroFadeUp 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .hero-anim-1 { animation-delay: 0.15s; }
+    .hero-anim-2 { animation-delay: 0.35s; }
+    .hero-anim-3 { animation-delay: 0.55s; }
+    .hero-anim-4 { animation-delay: 0.75s; }
+    .hero-anim-5 { animation-delay: 0.95s; }
+
+    /* ——— Countdown digit flip ——— */
+    .count-value {
+      display: inline-block;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .count-value.tick {
+      transform: translateY(-8px);
+      opacity: 0;
+    }
+
+    /* ——— Radio cards ——— */
+    .rsvp-choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .rsvp-choice .choice-card {
+      transition: border-color 0.25s ease, background-color 0.25s ease,
+                  color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .rsvp-choice input:checked + .choice-card {
+      border-color: #4A5538;
+      background-color: #4A5538;
+      color: #FBF9F4;
+      box-shadow: 0 10px 30px -12px rgba(62, 71, 47, 0.45);
+    }
+    .rsvp-choice input:checked + .choice-card .choice-sub { color: #D4BF94; }
+    .rsvp-choice input:focus-visible + .choice-card {
+      outline: 2px solid #C5AC7C;
+      outline-offset: 3px;
+    }
+    .rsvp-choice:hover .choice-card { transform: translateY(-2px); }
+
+    /* ——— Form fields ——— */
+    .field-input {
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    }
+    .field-input:focus {
+      outline: none;
+      border-color: #4A5538;
+      box-shadow: 0 0 0 3px rgba(92, 107, 71, 0.15);
+    }
+    .field-input.field-error {
+      border-color: #B3502D;
+      box-shadow: 0 0 0 3px rgba(179, 80, 45, 0.12);
+    }
+
+    /* ——— Success state crossfade ——— */
+    .fade-swap { transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-swap.is-hidden {
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+    }
+
+    @keyframes drawRing {
+      from { stroke-dashoffset: 160; }
+      to   { stroke-dashoffset: 0; }
+    }
+    @keyframes drawCheck {
+      from { stroke-dashoffset: 48; }
+      to   { stroke-dashoffset: 0; }
+    }
+    .success-ring  { stroke-dasharray: 160; stroke-dashoffset: 160; animation: drawRing 0.8s ease-out 0.2s forwards; }
+    .success-check { stroke-dasharray: 48;  stroke-dashoffset: 48;  animation: drawCheck 0.5s ease-out 0.9s forwards; }
+
+    /* ——— Gallery ——— */
+    .gallery-item { cursor: zoom-in; }
+    .gallery-item img {
+      transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-item .gallery-veil {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .gallery-item:hover .gallery-veil { opacity: 1; }
+    .gallery-item .gallery-caption {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease 0.05s, transform 0.5s ease 0.05s;
+    }
+    .gallery-item:hover .gallery-caption { opacity: 1; transform: translateY(0); }
+
+    /* ——— Lightbox ——— */
+    #lightbox {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    #lightbox.is-open { opacity: 1; pointer-events: auto; }
+    #lightbox img {
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+    }
+    #lightbox.is-open img { transform: scale(1); }
+
+    /* ——— Reduced motion ——— */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-stagger > * { opacity: 1; transform: none; transition: none; }
+      .hero-anim { animation: none; opacity: 1; }
+      .count-value { transition: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-alabaster-50 font-sans text-olive-800">
+
+  <!-- ============ NAV ============ -->
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-olive-800/5 bg-alabaster-50/80 backdrop-blur-md">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <a href="#top" class="font-serif text-xl tracking-wide text-olive-700">M <span class="text-champagne-500">&amp;</span> S</a>
+      <div class="hidden items-center gap-10 text-xs font-medium uppercase tracking-widest2 text-olive-600 sm:flex">
+        <a href="#details" class="transition-colors duration-300 hover:text-champagne-600">Details</a>
+        <a href="#gallery" class="transition-colors duration-300 hover:text-champagne-600">Gallery</a>
+        <a href="#rsvp" class="transition-colors duration-300 hover:text-champagne-600">RSVP</a>
+      </div>
+      <a href="#rsvp" class="rounded-full border border-olive-600 px-5 py-2 text-xs font-medium uppercase tracking-widest2 text-olive-700 transition-all duration-300 hover:bg-olive-600 hover:text-alabaster-50 sm:hidden">RSVP</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pb-20 pt-32 text-center">
+    <!-- soft background washes -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+      <div class="absolute -top-32 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-champagne-300/25 blur-3xl"></div>
+      <div class="absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-olive-500/10 blur-3xl"></div>
+      <div class="absolute -bottom-32 -right-20 h-80 w-80 rounded-full bg-champagne-400/15 blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-3xl">
+      <p class="hero-anim hero-anim-1 text-xs font-medium uppercase tracking-widest2 text-champagne-600">Together with their families</p>
+
+      <h1 class="hero-anim hero-anim-2 mt-8 font-serif text-6xl font-medium leading-tight text-olive-800 sm:text-7xl md:text-8xl">
+        Mathen
+        <span class="mx-1 inline-block font-serif text-4xl italic text-champagne-500 sm:text-5xl md:text-6xl">&amp;</span>
+        Suzaine
+      </h1>
+
+      <p class="hero-anim hero-anim-3 mt-8 font-serif text-lg italic text-olive-600 sm:text-xl">
+        request the pleasure of your company as they say &ldquo;I do&rdquo;
+      </p>
+
+      <!-- date + location -->
+      <div class="hero-anim hero-anim-4 mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-6">
+        <span class="text-sm font-medium uppercase tracking-widest2 text-olive-700">July 18, 2026</span>
+        <span aria-hidden="true" class="hidden h-px w-10 bg-champagne-400 sm:block"></span>
+        <span class="text-sm font-medium uppercase tracking-widest2 text-olive-700">St. Johns Jacobite Syrian Church · Pannoor, Kerala</span>
+      </div>
+
+      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Mathen%20%26%20Suzaine%27s%20Wedding&dates=20260718T090000Z%2F20260718T160000Z&details=Holy%20Matrimony%20at%20St.%20Johns%20Jacobite%20Syrian%20Church%2C%20Pannoor%20at%202%3A30%20PM%2C%20followed%20by%20reception%20at%20Josh%20Pavilion%2C%20Thodupuzha%20at%206%3A30%20PM.&location=St.%20Johns%20Jacobite%20Syrian%20Church%2C%20Pannoor%2C%20Kerala%2C%20India"
+         target="_blank" rel="noopener"
+         class="hero-anim hero-anim-4 mt-7 inline-flex items-center gap-2.5 rounded-full border border-olive-600/40 px-6 py-2.5 text-xs font-medium uppercase tracking-widest2 text-olive-700 transition-all duration-300 hover:border-olive-600 hover:bg-olive-600 hover:text-alabaster-50">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+        Add to Calendar
+      </a>
+
+      <!-- countdown -->
+      <div class="hero-anim hero-anim-5 mt-14">
+        <p class="mb-6 text-[0.65rem] font-medium uppercase tracking-widest2 text-champagne-600">Counting down to forever</p>
+        <div id="countdown" class="mx-auto grid max-w-xl grid-cols-4 gap-3 sm:gap-5">
+          <div class="rounded-2xl border border-olive-800/10 bg-white/60 px-2 py-5 shadow-sm backdrop-blur-sm sm:py-6">
+            <span id="cd-days" class="count-value font-serif text-3xl font-medium text-olive-800 sm:text-5xl">--</span>
+            <p class="mt-2 text-[0.6rem] font-medium uppercase tracking-widest2 text-olive-500 sm:text-xs">Days</p>
+          </div>
+          <div class="rounded-2xl border border-olive-800/10 bg-white/60 px-2 py-5 shadow-sm backdrop-blur-sm sm:py-6">
+            <span id="cd-hours" class="count-value font-serif text-3xl font-medium text-olive-800 sm:text-5xl">--</span>
+            <p class="mt-2 text-[0.6rem] font-medium uppercase tracking-widest2 text-olive-500 sm:text-xs">Hours</p>
+          </div>
+          <div class="rounded-2xl border border-olive-800/10 bg-white/60 px-2 py-5 shadow-sm backdrop-blur-sm sm:py-6">
+            <span id="cd-minutes" class="count-value font-serif text-3xl font-medium text-olive-800 sm:text-5xl">--</span>
+            <p class="mt-2 text-[0.6rem] font-medium uppercase tracking-widest2 text-olive-500 sm:text-xs">Minutes</p>
+          </div>
+          <div class="rounded-2xl border border-olive-800/10 bg-white/60 px-2 py-5 shadow-sm backdrop-blur-sm sm:py-6">
+            <span id="cd-seconds" class="count-value font-serif text-3xl font-medium text-olive-800 sm:text-5xl">--</span>
+            <p class="mt-2 text-[0.6rem] font-medium uppercase tracking-widest2 text-olive-500 sm:text-xs">Seconds</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- scroll cue -->
+    <a href="#details" aria-label="Scroll to details" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-olive-500 transition-colors duration-300 hover:text-champagne-600">
+      <svg class="h-6 w-6 animate-bounce" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+      </svg>
+    </a>
+  </section>
+
+  <!-- ============ DETAILS ============ -->
+  <section id="details" class="bg-alabaster-100 px-6 py-24 sm:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal text-center">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-champagne-600">The Celebration</p>
+        <h2 class="mt-4 font-serif text-4xl font-medium text-olive-800 sm:text-5xl">Wedding Details</h2>
+        <div aria-hidden="true" class="mx-auto mt-6 h-px w-16 bg-champagne-400"></div>
+      </div>
+
+      <div class="reveal-stagger reveal mt-16 grid gap-8 md:grid-cols-3">
+        <!-- Venue -->
+        <article class="group rounded-3xl border border-olive-800/10 bg-alabaster-50 p-10 text-center shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-olive-800/10">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-champagne-400/60 bg-champagne-300/20 text-olive-600 transition-colors duration-500 group-hover:bg-olive-600 group-hover:text-champagne-300">
+            <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+          </div>
+          <h3 class="mt-7 font-serif text-2xl text-olive-800">Ceremony</h3>
+          <p class="mt-4 text-sm leading-relaxed text-olive-600">
+            St. Johns Jacobite Syrian Church<br />
+            Pannoor<br />
+            Kerala, India
+          </p>
+          <p class="mt-5 text-xs font-medium uppercase tracking-widest2 text-champagne-600">2:30 PM</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=St.+Johns+Jacobite+Syrian+Church+Pannoor+Kerala" target="_blank" rel="noopener"
+             class="mt-5 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest2 text-olive-600 underline-offset-4 transition-colors duration-300 hover:text-champagne-600 hover:underline">
+            Get Directions
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+          </a>
+        </article>
+
+        <!-- Reception -->
+        <article class="group rounded-3xl border border-olive-800/10 bg-alabaster-50 p-10 text-center shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-olive-800/10">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-champagne-400/60 bg-champagne-300/20 text-olive-600 transition-colors duration-500 group-hover:bg-olive-600 group-hover:text-champagne-300">
+            <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="mt-7 font-serif text-2xl text-olive-800">Reception</h3>
+          <ul class="mt-4 space-y-2.5 text-sm text-olive-600">
+            <li class="flex items-center justify-center gap-3"><span class="font-medium text-olive-700">2:30 PM</span><span aria-hidden="true" class="h-px w-4 bg-champagne-400"></span>Ceremony</li>
+            <li class="flex items-center justify-center gap-3"><span class="font-medium text-olive-700">6:30 PM</span><span aria-hidden="true" class="h-px w-4 bg-champagne-400"></span>Reception</li>
+            <li class="text-xs italic text-olive-500 mt-1">Josh Pavilion, Thodupuzha</li>
+          </ul>
+          <p class="mt-5 text-xs font-medium uppercase tracking-widest2 text-champagne-600">Saturday, July 18</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Josh+Pavilion+Thodupuzha+Kerala" target="_blank" rel="noopener"
+             class="mt-5 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest2 text-olive-600 underline-offset-4 transition-colors duration-300 hover:text-champagne-600 hover:underline">
+            Get Directions
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+          </a>
+        </article>
+
+        <!-- Dress code -->
+        <article class="group rounded-3xl border border-olive-800/10 bg-alabaster-50 p-10 text-center shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-olive-800/10">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-champagne-400/60 bg-champagne-300/20 text-olive-600 transition-colors duration-500 group-hover:bg-olive-600 group-hover:text-champagne-300">
+            <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+            </svg>
+          </div>
+          <h3 class="mt-7 font-serif text-2xl text-olive-800">Dress Code</h3>
+          <p class="mt-4 text-sm leading-relaxed text-olive-600">
+            Garden formal attire.<br />
+            Think flowing dresses, linen suits,<br />
+            and shades of earth and sage.
+          </p>
+          <p class="mt-5 text-xs font-medium uppercase tracking-widest2 text-champagne-600">Heels beware — grass underfoot</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUOTE INTERLUDE ============ -->
+  <section class="px-6 py-20 sm:py-24">
+    <blockquote class="reveal mx-auto max-w-2xl text-center">
+      <p class="font-serif text-2xl italic leading-relaxed text-olive-700 sm:text-3xl">
+        &ldquo;Whatever our souls are made of, his and mine are the same.&rdquo;
+      </p>
+      <footer class="mt-6 text-xs font-medium uppercase tracking-widest2 text-champagne-600">— Emily Brontë</footer>
+    </blockquote>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <!-- To use real photos: replace each <img src> (grid thumbnail) and data-full (lightbox size) with your image paths. -->
+  <section id="gallery" class="bg-alabaster-100 px-6 py-24 sm:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal text-center">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-champagne-600">Our Story in Frames</p>
+        <h2 class="mt-4 font-serif text-4xl font-medium text-olive-800 sm:text-5xl">Captured Moments</h2>
+        <div aria-hidden="true" class="mx-auto mt-6 h-px w-16 bg-champagne-400"></div>
+        <p class="mt-6 text-sm leading-relaxed text-olive-600">A few of our favourite memories on the road to forever.</p>
+      </div>
+
+      <!-- Band 1: feature + four squares -->
+      <div class="reveal mt-16 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4">
+        <figure class="gallery-item group relative col-span-2 row-span-2 aspect-[4/5] overflow-hidden rounded-3xl md:aspect-auto md:h-full"
+                data-full="https://picsum.photos/seed/mathu1/1600/2000" data-caption="Where it all began">
+          <img src="https://picsum.photos/seed/mathu1/1000/1250" alt="Mathen and Suzaine — engagement portrait" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-7 text-left">
+            <span class="font-serif text-xl italic text-alabaster-50">Where it all began</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-item group relative aspect-square overflow-hidden rounded-2xl"
+                data-full="https://picsum.photos/seed/mathu2/1600/1600" data-caption="The proposal">
+          <img src="https://picsum.photos/seed/mathu2/700/700" alt="The proposal" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-5 text-left">
+            <span class="font-serif text-base italic text-alabaster-50">The proposal</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-item group relative aspect-square overflow-hidden rounded-2xl"
+                data-full="https://picsum.photos/seed/mathu3/1600/1600" data-caption="Golden hour">
+          <img src="https://picsum.photos/seed/mathu3/700/700" alt="Golden hour together" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-5 text-left">
+            <span class="font-serif text-base italic text-alabaster-50">Golden hour</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-item group relative aspect-square overflow-hidden rounded-2xl"
+                data-full="https://picsum.photos/seed/mathu4/1600/1600" data-caption="Little adventures">
+          <img src="https://picsum.photos/seed/mathu4/700/700" alt="Little adventures" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-5 text-left">
+            <span class="font-serif text-base italic text-alabaster-50">Little adventures</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-item group relative aspect-square overflow-hidden rounded-2xl"
+                data-full="https://picsum.photos/seed/mathu5/1600/1600" data-caption="Quiet moments">
+          <img src="https://picsum.photos/seed/mathu5/700/700" alt="Quiet moments" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-5 text-left">
+            <span class="font-serif text-base italic text-alabaster-50">Quiet moments</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Band 2: three portraits -->
+      <div class="reveal mt-4 grid grid-cols-3 gap-4 sm:mt-5 sm:gap-5">
+        <figure class="gallery-item group relative aspect-[3/4] overflow-hidden rounded-2xl"
+                data-full="https://picsum.photos/seed/mathu6/1500/2000" data-caption="With our families">
+          <img src="https://picsum.photos/seed/mathu6/600/800" alt="With our families" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-5 text-left">
+            <span class="font-serif text-base italic text-alabaster-50">With our families</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-item group relative aspect-[3/4] overflow-hidden rounded-2xl"
+                data-full="https://picsum.photos/seed/mathu7/1500/2000" data-caption="The yes">
+          <img src="https://picsum.photos/seed/mathu7/600/800" alt="The yes" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-5 text-left">
+            <span class="font-serif text-base italic text-alabaster-50">The yes</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-item group relative aspect-[3/4] overflow-hidden rounded-2xl"
+                data-full="https://picsum.photos/seed/mathu8/1500/2000" data-caption="Forever begins">
+          <img src="https://picsum.photos/seed/mathu8/600/800" alt="Forever begins" loading="lazy" class="h-full w-full object-cover" />
+          <div aria-hidden="true" class="gallery-veil absolute inset-0 bg-gradient-to-t from-olive-900/70 via-olive-900/10 to-transparent"></div>
+          <figcaption class="gallery-caption absolute bottom-0 left-0 right-0 p-5 text-left">
+            <span class="font-serif text-base italic text-alabaster-50">Forever begins</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div id="lightbox" class="fixed inset-0 z-[60] flex items-center justify-center bg-olive-900/95 p-4 backdrop-blur-sm sm:p-10" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button id="lightbox-close" aria-label="Close photo viewer"
+            class="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-alabaster-50/25 text-alabaster-50 transition-colors duration-300 hover:border-champagne-400 hover:text-champagne-300">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+    <button id="lightbox-prev" aria-label="Previous photo"
+            class="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-alabaster-50/25 text-alabaster-50 transition-colors duration-300 hover:border-champagne-400 hover:text-champagne-300 sm:left-6">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+    </button>
+    <button id="lightbox-next" aria-label="Next photo"
+            class="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-alabaster-50/25 text-alabaster-50 transition-colors duration-300 hover:border-champagne-400 hover:text-champagne-300 sm:right-6">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+    </button>
+    <figure class="flex max-h-full flex-col items-center">
+      <img id="lightbox-img" src="" alt="" class="max-h-[80vh] max-w-full rounded-xl object-contain shadow-2xl" />
+      <figcaption id="lightbox-caption" class="mt-5 font-serif text-lg italic text-alabaster-50/90"></figcaption>
+    </figure>
+  </div>
+
+  <!-- ============ RSVP ============ -->
+  <section id="rsvp" class="px-6 pb-28 pt-8 sm:pb-36">
+    <div class="mx-auto max-w-2xl">
+      <div class="reveal text-center">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-champagne-600">Kindly Respond</p>
+        <h2 class="mt-4 font-serif text-4xl font-medium text-olive-800 sm:text-5xl">RSVP</h2>
+        <div aria-hidden="true" class="mx-auto mt-6 h-px w-16 bg-champagne-400"></div>
+        <p class="mt-6 text-sm leading-relaxed text-olive-600">
+          We would be honored to have you with us.<br class="hidden sm:block" />
+          Please respond by <span class="font-medium text-olive-700">June 15, 2026</span>.
+        </p>
+      </div>
+
+      <!-- card -->
+      <div class="reveal relative mt-12 overflow-hidden rounded-3xl border border-olive-800/10 bg-white shadow-xl shadow-olive-800/10">
+        <div aria-hidden="true" class="h-1.5 w-full bg-gradient-to-r from-champagne-400 via-olive-500 to-champagne-400"></div>
+
+        <div class="relative p-8 sm:p-12">
+
+          <!-- ===== FORM STATE ===== -->
+          <form id="rsvp-form" class="fade-swap space-y-8" novalidate>
+
+            <!-- Full name -->
+            <div>
+              <label for="full-name" class="mb-2.5 block text-xs font-medium uppercase tracking-widest2 text-olive-700">Full Name <span class="text-champagne-600">*</span></label>
+              <input
+                type="text" id="full-name" name="fullName" autocomplete="name"
+                placeholder="e.g. Jordan Whitfield"
+                class="field-input w-full rounded-xl border border-olive-800/15 bg-alabaster-50 px-5 py-3.5 text-sm text-olive-800 placeholder:text-olive-500/50" />
+              <p data-error-for="full-name" class="mt-2 hidden text-xs text-[#B3502D]">Please share your full name.</p>
+            </div>
+
+            <!-- Attendance -->
+            <fieldset>
+              <legend class="mb-2.5 block text-xs font-medium uppercase tracking-widest2 text-olive-700">Will you be attending? <span class="text-champagne-600">*</span></legend>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <label class="rsvp-choice relative cursor-pointer">
+                  <input type="radio" name="attendance" value="accepts" />
+                  <span class="choice-card flex flex-col items-center gap-1 rounded-xl border border-olive-800/15 bg-alabaster-50 px-5 py-5 text-center">
+                    <span class="font-serif text-lg">Joyfully Accepts</span>
+                    <span class="choice-sub text-xs uppercase tracking-widest2 text-olive-500">See you there</span>
+                  </span>
+                </label>
+                <label class="rsvp-choice relative cursor-pointer">
+                  <input type="radio" name="attendance" value="declines" />
+                  <span class="choice-card flex flex-col items-center gap-1 rounded-xl border border-olive-800/15 bg-alabaster-50 px-5 py-5 text-center">
+                    <span class="font-serif text-lg">Regretfully Declines</span>
+                    <span class="choice-sub text-xs uppercase tracking-widest2 text-olive-500">Missed with love</span>
+                  </span>
+                </label>
+              </div>
+              <p data-error-for="attendance" class="mt-2 hidden text-xs text-[#B3502D]">Please let us know if you can make it.</p>
+            </fieldset>
+
+            <!-- Guests -->
+            <div>
+              <label for="guest-count" class="mb-2.5 block text-xs font-medium uppercase tracking-widest2 text-olive-700">Number of Guests <span class="text-champagne-600">*</span></label>
+              <div class="relative">
+                <select
+                  id="guest-count" name="guests"
+                  class="field-input w-full cursor-pointer appearance-none rounded-xl border border-olive-800/15 bg-alabaster-50 px-5 py-3.5 text-sm text-olive-800">
+                  <option value="" selected disabled>Select party size…</option>
+                  <option value="1">Just me — 1 guest</option>
+                  <option value="2">2 guests</option>
+                  <option value="3">3 guests</option>
+                  <option value="4">4 guests</option>
+                </select>
+                <svg aria-hidden="true" class="pointer-events-none absolute right-5 top-1/2 h-4 w-4 -translate-y-1/2 text-olive-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
+              <p data-error-for="guest-count" class="mt-2 hidden text-xs text-[#B3502D]">Please select the size of your party.</p>
+            </div>
+
+            <!-- Dietary -->
+            <div>
+              <label for="dietary" class="mb-2.5 block text-xs font-medium uppercase tracking-widest2 text-olive-700">Dietary Restrictions <span class="normal-case tracking-normal text-olive-500">(optional)</span></label>
+              <textarea
+                id="dietary" name="dietary" rows="3"
+                placeholder="Allergies, vegetarian, vegan, gluten-free…"
+                class="field-input w-full resize-none rounded-xl border border-olive-800/15 bg-alabaster-50 px-5 py-3.5 text-sm text-olive-800 placeholder:text-olive-500/50"></textarea>
+            </div>
+
+            <!-- Submit -->
+            <button
+              type="submit" id="submit-btn"
+              class="group relative w-full overflow-hidden rounded-xl bg-olive-600 px-8 py-4 text-sm font-medium uppercase tracking-widest2 text-alabaster-50 shadow-lg shadow-olive-800/25 transition-all duration-300 hover:-translate-y-0.5 hover:bg-olive-700 hover:shadow-xl hover:shadow-olive-800/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-500 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70">
+              <span class="relative z-10 inline-flex items-center justify-center gap-3">
+                <span id="submit-label">Submit RSVP</span>
+                <svg id="submit-arrow" class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </span>
+              <span aria-hidden="true" class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-champagne-400/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+            </button>
+          </form>
+
+          <!-- ===== SUCCESS STATE ===== -->
+          <div id="rsvp-success" class="fade-swap is-hidden flex flex-col items-center justify-center px-4 py-10 text-center" role="status" aria-live="polite">
+            <svg class="h-20 w-20" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+              <circle class="success-ring" cx="28" cy="28" r="25" stroke="#C5AC7C" stroke-width="1.5" />
+              <path class="success-check" d="M18 29l7 7 13-15" stroke="#4A5538" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <h3 class="mt-8 font-serif text-3xl text-olive-800">Thank You!</h3>
+            <p id="success-message" class="mt-4 max-w-sm text-sm leading-relaxed text-olive-600">
+              Your response has been received.
+            </p>
+            <button
+              id="edit-response"
+              class="mt-8 text-xs font-medium uppercase tracking-widest2 text-champagne-600 underline-offset-4 transition-colors duration-300 hover:text-olive-700 hover:underline">
+              Edit my response
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="border-t border-olive-800/10 bg-alabaster-100 px-6 py-14 text-center">
+    <p class="font-serif text-2xl text-olive-700">Mathen <span class="italic text-champagne-500">&amp;</span> Suzaine</p>
+    <p class="mt-3 text-xs font-medium uppercase tracking-widest2 text-olive-500">July 18, 2026 · Pannoor, Kerala</p>
+    <p class="mt-6 text-xs text-olive-500/70">Made with love · #MathenAndSuzaineSayIDo</p>
+  </footer>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ============================================================
+         1. COUNTDOWN TIMER
+         ============================================================ */
+      // Target: ceremony start, pinned to IST so the countdown is correct
+      // for guests in any timezone. Change this one line to update everywhere.
+      const WEDDING_DATE = new Date('2026-07-18T14:30:00+05:30');
+
+      const countdownEls = {
+        days: document.getElementById('cd-days'),
+        hours: document.getElementById('cd-hours'),
+        minutes: document.getElementById('cd-minutes'),
+        seconds: document.getElementById('cd-seconds'),
+      };
+
+      const pad = (n) => String(n).padStart(2, '0');
+
+      // Animate only the units whose value actually changed.
+      function setValue(el, next) {
+        if (el.textContent === next) return;
+        el.classList.add('tick');
+        setTimeout(() => {
+          el.textContent = next;
+          el.classList.remove('tick');
+        }, 150);
+      }
+
+      function updateCountdown() {
+        const diff = WEDDING_DATE.getTime() - Date.now();
+
+        if (diff <= 0) {
+          setValue(countdownEls.days, '00');
+          setValue(countdownEls.hours, '00');
+          setValue(countdownEls.minutes, '00');
+          setValue(countdownEls.seconds, '00');
+          clearInterval(countdownInterval);
+          return;
+        }
+
+        setValue(countdownEls.days, pad(Math.floor(diff / 86400000)));
+        setValue(countdownEls.hours, pad(Math.floor(diff / 3600000) % 24));
+        setValue(countdownEls.minutes, pad(Math.floor(diff / 60000) % 60));
+        setValue(countdownEls.seconds, pad(Math.floor(diff / 1000) % 60));
+      }
+
+      updateCountdown();
+      const countdownInterval = setInterval(updateCountdown, 1000);
+
+      /* ============================================================
+         2. SCROLL REVEAL
+         ============================================================ */
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+      /* ============================================================
+         3. GALLERY LIGHTBOX
+         ============================================================ */
+      const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      let currentIndex = -1;
+
+      function openLightbox(index) {
+        currentIndex = (index + galleryItems.length) % galleryItems.length;
+        const item = galleryItems[currentIndex];
+        lightboxImg.src = item.dataset.full;
+        lightboxImg.alt = item.querySelector('img').alt;
+        lightboxCaption.textContent = item.dataset.caption || '';
+        lightbox.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        document.body.style.overflow = '';
+        currentIndex = -1;
+      }
+
+      galleryItems.forEach((item, i) => {
+        item.addEventListener('click', () => openLightbox(i));
+      });
+      document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+      document.getElementById('lightbox-prev').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(currentIndex - 1); });
+      document.getElementById('lightbox-next').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(currentIndex + 1); });
+      lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') openLightbox(currentIndex - 1);
+        if (e.key === 'ArrowRight') openLightbox(currentIndex + 1);
+      });
+
+      /* ============================================================
+         4. RSVP FORM — validation + success state
+         ============================================================ */
+      const form = document.getElementById('rsvp-form');
+      const successPanel = document.getElementById('rsvp-success');
+      const successMessage = document.getElementById('success-message');
+      const submitBtn = document.getElementById('submit-btn');
+      const submitLabel = document.getElementById('submit-label');
+      const editBtn = document.getElementById('edit-response');
+
+      const nameInput = document.getElementById('full-name');
+      const guestSelect = document.getElementById('guest-count');
+
+      function showError(key, show) {
+        const msg = form.querySelector(`[data-error-for="${key}"]`);
+        if (msg) msg.classList.toggle('hidden', !show);
+      }
+
+      function validate() {
+        let valid = true;
+
+        // Name: required, at least 2 characters.
+        const nameOk = nameInput.value.trim().length >= 2;
+        nameInput.classList.toggle('field-error', !nameOk);
+        showError('full-name', !nameOk);
+        if (!nameOk) valid = false;
+
+        // Attendance: one option selected.
+        const attendance = form.querySelector('input[name="attendance"]:checked');
+        showError('attendance', !attendance);
+        if (!attendance) valid = false;
+
+        // Guests: a party size chosen.
+        const guestsOk = guestSelect.value !== '';
+        guestSelect.classList.toggle('field-error', !guestsOk);
+        showError('guest-count', !guestsOk);
+        if (!guestsOk) valid = false;
+
+        return valid;
+      }
+
+      // Clear errors as the guest corrects them.
+      nameInput.addEventListener('input', () => {
+        if (nameInput.value.trim().length >= 2) {
+          nameInput.classList.remove('field-error');
+          showError('full-name', false);
+        }
+      });
+      guestSelect.addEventListener('change', () => {
+        guestSelect.classList.remove('field-error');
+        showError('guest-count', false);
+      });
+      form.querySelectorAll('input[name="attendance"]').forEach((radio) => {
+        radio.addEventListener('change', () => showError('attendance', false));
+      });
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (!validate()) {
+          const firstError = form.querySelector('.field-error, [data-error-for]:not(.hidden)');
+          if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitLabel.textContent = 'Sending…';
+
+        const data = {
+          fullName: nameInput.value.trim(),
+          attendance: form.querySelector('input[name="attendance"]:checked').value,
+          guests: guestSelect.value,
+          dietary: document.getElementById('dietary').value.trim(),
+        };
+
+        // Send to Google Apps Script webhook
+        fetch('https://script.google.com/macros/s/AKfycbytEDd-l9cYcAlGMyz1djZvgaUtDc2vCuCbAKun5CY1StZ7z50wbHq4Epu4M_2YRqV1rA/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        })
+        .then(() => {
+          const firstName = data.fullName.split(/\s+/)[0];
+          successMessage.textContent =
+            data.attendance === 'accepts'
+              ? `${firstName}, your response has been received — we can't wait to celebrate with you in Kerala!`
+              : `${firstName}, thank you for letting us know. You'll be missed, and we'll raise a glass in your honor.`;
+
+          form.classList.add('is-hidden');
+          successPanel.classList.remove('is-hidden');
+
+          // Restart the draw animations on each show.
+          successPanel.querySelectorAll('.success-ring, .success-check').forEach((el) => {
+            el.style.animation = 'none';
+            void el.getBoundingClientRect(); // reflow
+            el.style.animation = '';
+          });
+        })
+        .catch(() => {
+          alert('There was an issue submitting your RSVP. Please try again.');
+          submitBtn.disabled = false;
+          submitLabel.textContent = 'Submit RSVP';
+        });
+      });
+
+      editBtn.addEventListener('click', () => {
+        successPanel.classList.add('is-hidden');
+        form.classList.remove('is-hidden');
+        submitBtn.disabled = false;
+        submitLabel.textContent = 'Submit RSVP';
+      });
+    })();
+  </script>
+</body>
+</html>
